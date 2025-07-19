@@ -14,6 +14,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [1.0.1] - 2025-07-19
+
+### Fixed
+- Improved `requestTimeout` return type structure for better organization
+  - Changed from `{ rid, sid, cancel }` to `{ ids: { r, s }, cancel }`
+  - `ids.r` contains requestAnimationFrame ID (previously `rid`)
+  - `ids.s` contains setTimeout ID (previously `sid`)
+  - Enhanced JSDoc documentation with clearer examples
+
+### Added
+- New `RequestTimeoudIds` type for better type safety and code organization
+
 ## [1.0.0] - 2025-07-19
 
 ### Added
@@ -38,5 +50,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Supports cancellation via returned cancel function
   - Handles edge cases (negative delays, etc.)
 
-[Unreleased]: https://github.com/ffsmio/ffsmio-requester/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/ffsmio/ffsmio-requester/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/ffsmio/ffsmio-requester/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/ffsmio/ffsmio-requester/releases/tag/v1.0.0

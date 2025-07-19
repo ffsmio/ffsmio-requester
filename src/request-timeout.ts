@@ -1,6 +1,10 @@
 import { Timeout } from "./types";
 
 export type RequestTimeoutCallback = () => void;
+export type RequestTimeoudIds = {
+  r: number | null;
+  s: Timeout | null;
+};
 
 /**
  * Creates a timeout that uses requestAnimationFrame for better performance when available.
@@ -8,7 +12,7 @@ export type RequestTimeoutCallback = () => void;
  * 
  * @param callback - The function to execute after the delay
  * @param delay - The delay in milliseconds before executing the callback. Defaults to 0 if not provided or negative.
- * @returns An object containing the request ID, timeout ID, and a cancel function
+ * @returns An object containing the timeout IDs object and a cancel function
  * 
  * @example
  * ```typescript
@@ -20,6 +24,10 @@ export type RequestTimeoutCallback = () => void;
  * // Cancel the timeout
  * timeout.cancel();
  * 
+ * // Access timeout IDs
+ * console.log('RequestAnimationFrame ID:', timeout.ids.r);
+ * console.log('SetTimeout ID:', timeout.ids.s);
+ * 
  * // Immediate execution (delay = 0)
  * const immediate = requestTimeout(() => {
  *   console.log('Executed on next animation frame or immediately');
@@ -27,40 +35,41 @@ export type RequestTimeoutCallback = () => void;
  * ```
  */
 export function requestTimeout(callback: RequestTimeoutCallback, delay?: number) {
-  let rid: number | null = null;
-  let sid: Timeout | null = null;
+  const ids: RequestTimeoudIds = {
+    r: null,
+    s: null,
+  };
   const timeout = Math.max(0, delay || 0);
 
   function cancel() {
-    rid && cancelAnimationFrame(rid);
-    sid && clearTimeout(sid);
-    rid = null;
-    sid = null;
+    ids.r && cancelAnimationFrame(ids.r);
+    ids.s && clearTimeout(ids.s);
+    ids.r = null;
+    ids.s = null;
   }
 
   if (typeof requestAnimationFrame === "function") {
-    rid = requestAnimationFrame(() => {
-      sid = setTimeout(() => {
+    ids.r = requestAnimationFrame(() => {
+      ids.s = setTimeout(() => {
         callback();
         cancel();
       }, timeout);
     });
   } else {
-    sid = setTimeout(() => {
+    ids.s = setTimeout(() => {
       callback();
       cancel();
     }, timeout);
   }
 
   return {
-    rid,
-    sid,
+    ids,
     cancel,
   };
 }
 
 /**
  * Return type of the requestTimeout function.
- * Contains the request animation frame ID, setTimeout ID, and cancel function.
+ * Contains the timeout IDs object (with requestAnimationFrame and setTimeout IDs) and cancel function.
  */
 export type RequestTimeout = ReturnType<typeof requestTimeout>;

@@ -1,6 +1,6 @@
 {
   "name": "@ffsm/requester",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A comprehensive utility library for request handling, timeouts, and various helper functions for Node.js and browser applications",
   "main": "./dist/index.js",
   "module": "./dist/index.esm.js",

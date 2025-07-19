@@ -77,8 +77,9 @@ const defaultTimeout = requestTimeout(() => {
 - `delay?: number` - The delay in milliseconds (optional, defaults to 0)
 
 **Returns:** `RequestTimeout`
-- `rid: number | null` - The requestAnimationFrame ID (browser only)
-- `sid: Timeout | null` - The setTimeout ID
+- `ids: RequestTimeoutIds` - Object containing timeout IDs
+  - `ids.r: number | null` - The requestAnimationFrame ID (browser only)
+  - `ids.s: Timeout | null` - The setTimeout ID
 - `cancel: () => void` - Function to cancel the timeout
 
 **Example:**
@@ -86,6 +87,10 @@ const defaultTimeout = requestTimeout(() => {
 const timeout = requestTimeout(() => {
   console.log('Hello World!');
 }, 500);
+
+// Access timeout IDs
+console.log('RAF ID:', timeout.ids.r);
+console.log('Timeout ID:', timeout.ids.s);
 
 // Cancel if needed
 if (someCondition) {
